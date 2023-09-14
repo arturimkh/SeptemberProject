@@ -6,11 +6,17 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class RegistrationViewController: UIViewController {
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    
+    private let genderSwitcher: CustomMemberButton = {
+        let genderSwitcher = CustomMemberButton()
+        return genderSwitcher
+    }()
     
     private let nameTextField: CustomTextField = {
         let textField = CustomTextField(placeholder: "Имя")
@@ -50,8 +56,8 @@ final class RegistrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       setupViews()
-
+        setupViews()
+        
     }
 }
 
@@ -61,6 +67,7 @@ private extension RegistrationViewController {
     func setupViews() {
         configureScrollView()
         configureContentView()
+        configureGenderSwitcher()
         configureNameTextField()
         configureEmailTextField()
         configurePlaceTextField()
@@ -102,18 +109,29 @@ private extension RegistrationViewController {
         ])
     }
     
+    func configureGenderSwitcher() {
+       
+        contentView.addSubview(genderSwitcher)
+        
+        NSLayoutConstraint.activate([
+            genderSwitcher.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            genderSwitcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -50),
+            //   genderSwitcher.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7),
+            genderSwitcher.heightAnchor.constraint(equalToConstant: 46),
+            genderSwitcher.widthAnchor.constraint(equalToConstant: 177)
+        ])
+    }
+    
     func configureNameTextField() {
-       // nameTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nameTextField)
         
         NSLayoutConstraint.activate([
-        nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 400),
+        nameTextField.topAnchor.constraint(equalTo: genderSwitcher.bottomAnchor, constant: 20),
         nameTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
         nameTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     func configureEmailTextField() {
-     //   emailTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emailTextField)
         
         NSLayoutConstraint.activate([
@@ -124,7 +142,6 @@ private extension RegistrationViewController {
     }
     
     func configurePlaceTextField() {
- //       placeTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(placeTextField)
         NSLayoutConstraint.activate([
         placeTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
@@ -134,7 +151,6 @@ private extension RegistrationViewController {
     }
     
     func configureMobileTextField() {
-//        mobileTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(mobileTextField)
         NSLayoutConstraint.activate([
         mobileTextField.topAnchor.constraint(equalTo: placeTextField.bottomAnchor, constant: 20),
@@ -144,7 +160,6 @@ private extension RegistrationViewController {
     }
     
     func configureBioTextFieald() {
- //       bioTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(bioTextField)
         NSLayoutConstraint.activate([
         bioTextField.topAnchor.constraint(equalTo: mobileTextField.bottomAnchor, constant: 20),
@@ -154,7 +169,6 @@ private extension RegistrationViewController {
     }
     
     func configurePassTextField() {
-  //      passTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(passTextField)
         NSLayoutConstraint.activate([
         passTextField.topAnchor.constraint(equalTo: bioTextField.bottomAnchor, constant: 20),
@@ -164,7 +178,6 @@ private extension RegistrationViewController {
     }
     
     func configurePass2TextField() {
-  //      pass2TextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(pass2TextField)
         NSLayoutConstraint.activate([
         pass2TextField.topAnchor.constraint(equalTo: passTextField.bottomAnchor, constant: 20),
