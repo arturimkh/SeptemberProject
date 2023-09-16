@@ -13,9 +13,16 @@ final class RegistrationViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let genderSwitcher: CustomMemberButton = {
-        let genderSwitcher = CustomMemberButton()
-        return genderSwitcher
+    private let genderSwitcherM: CustomMemberButton = {
+        let genderSwitcherM = CustomMemberButton(normalImageName: "ManOff",highlightedImageName: "ManOn", disabledImageName: "ManOff")
+        genderSwitcherM.addTarget(self, action: #selector(buttonMPressed), for: .touchUpInside)
+        return genderSwitcherM
+    }()
+    
+    private let genderSwitcherW: CustomMemberButton = {
+        let genderSwitcherW = CustomMemberButton(normalImageName: "WomanOff",highlightedImageName: "WomanOn", disabledImageName: "WomanOff")
+        genderSwitcherW.addTarget(self, action: #selector(buttonWPressed), for: .touchUpInside)
+        return genderSwitcherW
     }()
     
     private let nameTextField: CustomTextField = {
@@ -59,6 +66,16 @@ final class RegistrationViewController: UIViewController {
         setupViews()
         
     }
+    
+    @objc func buttonMPressed() {
+        genderSwitcherM.isEnabled = true
+        genderSwitcherW.isEnabled = false
+    }
+    
+    @objc func buttonWPressed() {
+        genderSwitcherM.isEnabled = false
+        genderSwitcherW.isEnabled = true
+    }
 }
 
 
@@ -67,6 +84,7 @@ private extension RegistrationViewController {
     func setupViews() {
         configureScrollView()
         configureContentView()
+        
         configureGenderSwitcher()
         configureNameTextField()
         configureEmailTextField()
@@ -109,81 +127,95 @@ private extension RegistrationViewController {
         ])
     }
     
+    func configureBackgroundStyle() {
+        
+    }
+    
     func configureGenderSwitcher() {
-       
-        contentView.addSubview(genderSwitcher)
+        
+        contentView.addSubview(genderSwitcherM)
+        contentView.addSubview(genderSwitcherW)
+        
+        genderSwitcherM.translatesAutoresizingMaskIntoConstraints = false
+        genderSwitcherW.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            genderSwitcher.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            genderSwitcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -50),
-            //   genderSwitcher.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7),
-            genderSwitcher.heightAnchor.constraint(equalToConstant: 46),
-            genderSwitcher.widthAnchor.constraint(equalToConstant: 177)
+            genderSwitcherM.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 200),
+            genderSwitcherM.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            genderSwitcherM.heightAnchor.constraint(equalToConstant: 46),
+            genderSwitcherM.widthAnchor.constraint(equalToConstant: 177)
         ])
-    }
+        NSLayoutConstraint.activate([
+            genderSwitcherW.topAnchor.constraint(equalTo: genderSwitcherM.topAnchor),
+            genderSwitcherW.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            genderSwitcherW.heightAnchor.constraint(equalToConstant: 46),
+            genderSwitcherW.widthAnchor.constraint(equalToConstant: 177)
+        ])
+       
+        }
     
     func configureNameTextField() {
         contentView.addSubview(nameTextField)
-        
         NSLayoutConstraint.activate([
-        nameTextField.topAnchor.constraint(equalTo: genderSwitcher.bottomAnchor, constant: 20),
-        nameTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        nameTextField.heightAnchor.constraint(equalToConstant: 60)
+            nameTextField.topAnchor.constraint(equalTo: genderSwitcherM.bottomAnchor, constant: 20),
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            nameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            nameTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
     func configureEmailTextField() {
         contentView.addSubview(emailTextField)
-        
         NSLayoutConstraint.activate([
-        emailTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20),
-        emailTextField.heightAnchor.constraint(equalToConstant: 60)
+            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20),
+            emailTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     func configurePlaceTextField() {
         contentView.addSubview(placeTextField)
         NSLayoutConstraint.activate([
-        placeTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
-        placeTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        placeTextField.heightAnchor.constraint(equalToConstant: 60)
+            placeTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
+            placeTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            placeTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     func configureMobileTextField() {
         contentView.addSubview(mobileTextField)
         NSLayoutConstraint.activate([
-        mobileTextField.topAnchor.constraint(equalTo: placeTextField.bottomAnchor, constant: 20),
-        mobileTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        mobileTextField.heightAnchor.constraint(equalToConstant: 60)
+            mobileTextField.topAnchor.constraint(equalTo: placeTextField.bottomAnchor, constant: 20),
+            mobileTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            mobileTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     func configureBioTextFieald() {
         contentView.addSubview(bioTextField)
         NSLayoutConstraint.activate([
-        bioTextField.topAnchor.constraint(equalTo: mobileTextField.bottomAnchor, constant: 20),
-        bioTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        bioTextField.heightAnchor.constraint(equalToConstant: 60)
+            bioTextField.topAnchor.constraint(equalTo: mobileTextField.bottomAnchor, constant: 20),
+            bioTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            bioTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     func configurePassTextField() {
         contentView.addSubview(passTextField)
         NSLayoutConstraint.activate([
-        passTextField.topAnchor.constraint(equalTo: bioTextField.bottomAnchor, constant: 20),
-        passTextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        passTextField.heightAnchor.constraint(equalToConstant: 60)
+            passTextField.topAnchor.constraint(equalTo: bioTextField.bottomAnchor, constant: 20),
+            passTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            passTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     func configurePass2TextField() {
         contentView.addSubview(pass2TextField)
         NSLayoutConstraint.activate([
-        pass2TextField.topAnchor.constraint(equalTo: passTextField.bottomAnchor, constant: 20),
-        pass2TextField.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-        pass2TextField.heightAnchor.constraint(equalToConstant: 60),
-        pass2TextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            pass2TextField.topAnchor.constraint(equalTo: passTextField.bottomAnchor, constant: 20),
+            pass2TextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            pass2TextField.heightAnchor.constraint(equalToConstant: 60),
+            pass2TextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     

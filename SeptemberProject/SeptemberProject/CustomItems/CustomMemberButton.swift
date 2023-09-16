@@ -10,46 +10,54 @@ import CoreMotion
 
 final class CustomMemberButton: UIButton {
 
-    var status: Bool = false {
-        didSet {
-            self.update()
+        // Имена изображений для разных состояний кнопки
+        var normalImageName: String?
+        var highlightedImageName: String?
+        var disabledImageName: String?
+        
+        // Изображения для разных состояний
+        var normalImage: UIImage?
+        var highlightedImage: UIImage?
+        var disabledImage: UIImage?
+ 
+        private var isHighlightedState = false
+        
+    init(normalImageName: String?, highlightedImageName: String?, disabledImageName: String?) {
+            super.init(frame: .zero)
+            
+            self.normalImageName = normalImageName
+            self.highlightedImageName = highlightedImageName
+            self.disabledImageName = disabledImageName
+   
+            normalImage = UIImage(named: normalImageName ?? "")
+            highlightedImage = UIImage(named: highlightedImageName ?? "")
+            disabledImage = UIImage(named: disabledImageName ?? "")
+ 
+            setImage(normalImage, for: .normal)
+            setImage(highlightedImage, for: .highlighted)
+            setImage(disabledImage, for: .disabled)
+        
+            addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        @objc private func buttonPressed() {
+            // Меняем изображение кнопки при нажатии
+            isHighlightedState.toggle()
+            if isHighlightedState {
+                setImage(highlightedImage, for: .normal)
+            } else {
+                setImage(normalImage, for: .normal)
+            }
         }
     }
-    var onImage = UIImage(named: "ManOn")
-    var offImage = UIImage(named: "ManOff")
+
+
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setStatus(false)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func update() {
-        UIView.transition(with: self, duration: 0.10, options: .transitionCrossDissolve, animations: {
-            self.status ? self.setImage(self.onImage, for: .normal) : self.setImage(self.offImage, for: .normal)
-        }, completion: nil)
-    }
-    func toggle() {
-        self.status ? self.setStatus(false) : self.setStatus(true)
-    }
-    
-    func setStatus(_ status: Bool) {
-        self.status = status
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        self.sendHapticFeedback()
-        self.toggle()
-    }
-    
-    func sendHapticFeedback() {
-        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: .heavy)
-        impactFeedbackgenerator.prepare()
-        impactFeedbackgenerator.impactOccurred()
-    }
-    
-}
+
+
+
+
